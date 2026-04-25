@@ -1,4 +1,4 @@
-from transformers import pipeline, AutoTokenizer
+# from transformers import pipeline, AutoTokenizer
 from langchain_openai import ChatOpenAI
 from langchain_huggingface import HuggingFacePipeline, ChatHuggingFace
 from langchain_core.tools import tool
@@ -26,12 +26,34 @@ class ModelServing(metaclass=SingletonMeta):
         # self.use_model = "hf"
         print(f"\n\nUsing {self.use_model} model")
 
-    def run_inference(self, messages, temperature=0.0, max_new_tokens=128, response_format=None):
+    def cleanup_response(self, content: str) -> dict:
+        """
+        Extract and parse JSON from response content, removing template tokens.
+        """
+        
+        try:
+            content = content.split("```json")[1].split("```")[0].strip()
+        except:
+            pass
+        
+        try:
+            content = content.split("```python")[1].split("```")[0].strip()
+        except:
+            pass
+
+        try:
+            content = content.repalce("```","")
+        except:
+            pass
+
+        return content
+
+    def run_inference(self, messages, temperature=0.0, max_new_tokens=1024, response_format=None):
 
         if self.use_model == "hf":
 
             hf_llm = HuggingFaceEndpoint(
-                repo_id="meta-llama/Llama-3.1-8B-Instruct",
+                repo_id="meta-llama/Llama-3.1-70B-Instruct",
                 task="conversational",
                 huggingfacehub_api_token=os.getenv("HF_TOKEN"),
                 temperature=temperature,
@@ -52,8 +74,6 @@ class ModelServing(metaclass=SingletonMeta):
                         """
                     break
 
-
-            messages = [SystemMessage(content=system_prompt)] + messages
             response = llm.invoke(messages)
 
             
@@ -72,9 +92,11 @@ class ModelServing(metaclass=SingletonMeta):
             response = llm.invoke(messages)
             response = response["raw"]
 
+        response.content = self.cleanup_response(response.content)
+
         return response
     
-    def run_inference_tools(self, messages, tools, temperature=0.0, max_new_tokens=128):
+    def run_inference_tools(self, messages, tools, temperature=0.0, max_new_tokens=1024):
 
         if self.use_model == "hf":
 
