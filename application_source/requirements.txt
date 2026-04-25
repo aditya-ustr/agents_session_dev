@@ -1,0 +1,12 @@
+jupyter==1.1.1
+pillow==12.2.0
+python-dotenv==1.2.2
+
+FlagEmbedding==1.4.0
+faiss-cpu==1.13.2
+langchain-text-splitters==1.1.2
+
+langchain==1.2.15
+langchain-huggingface==1.2.2
+langchain-openai==1.2.0
+langgraph==1.1.9

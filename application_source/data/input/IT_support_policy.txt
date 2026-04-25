@@ -1,0 +1,413 @@
+---
+
+## COMPANY IT SUPPORT POLICY HANDBOOK
+**Version:** 2.0 (Expanded)
+**Last Updated:** April 2026
+**Document Owner:** Chief Information Officer (CIO)
+**Confidentiality Level:** Internal Use Only
+
+---
+
+## DOCUMENT HISTORY AND VERSION CONTROL
+
+| Version | Date | Author | Description of Changes |
+| :--- | :--- | :--- | :--- |
+| 1.0 | Jan 2025 | IT Department | Initial draft of basic IT guidelines. |
+| 1.1 | Jun 2025 | Security Team | Added MFA requirements and updated software lists. |
+| 1.2 | Nov 2025 | HR & IT | Aligned remote work policies with new HR directives. |
+| 2.0 | Apr 2026 | CIO Office | Comprehensive expansion of all policies and SLA matrices. |
+
+---
+
+## TABLE OF CONTENTS
+
+1.  Password Reset Policy
+2.  VPN Access Policy
+3.  Software Installation Policy
+4.  Laptop Troubleshooting Policy
+5.  Email Access Policy
+6.  Remote Work IT Policy
+7.  Hardware Replacement Policy
+8.  Security Policy
+9.  Printer Support Policy
+10. IT Support Contact Guidelines
+
+---
+
+## 1. PASSWORD RESET POLICY
+
+### 1.1 Purpose
+The purpose of this policy is to establish a secure, standardized, and self-service methodology for managing corporate identity credentials. Passwords are the primary line of defense for corporate intellectual property.
+
+### 1.2 Scope
+This policy applies to all full-time employees, part-time employees, contractors, consultants, and third-party vendors accessing the corporate Active Directory (AD) and Single Sign-On (SSO) environments.
+
+### 1.3 Self-Service Password Portal Instructions
+Employees who forget their corporate password must utilize the Self-Service Password Portal before contacting the IT Helpdesk.
+
+* Open a secure web browser on a compliant device.
+* Navigate to the official portal: [https://password.company.internal](https://password.company.internal)
+* Click on the "Forgot Password / Account Recovery" link on the landing page.
+* Enter your 6-digit alphanumeric Employee ID.
+* Complete the CAPTCHA verification to prevent automated bot attacks.
+* Select your preferred Multi-Factor Authentication (MFA) method (SMS OTP, Authenticator App, or Hardware Token).
+* Enter the 6-digit Time-Based One-Time Password (TOTP) or SMS OTP.
+* Enter your new password adhering to the complexity rules below.
+* Confirm the new password by typing it a second time.
+* Click "Submit and Update Credentials".
+
+### 1.4 Password Complexity Rules
+To comply with our zero-trust security framework, all passwords must meet the following strict criteria:
+
+* **Length:** Minimum of 12 characters, maximum of 64 characters.
+* **Uppercase:** Must include at least one uppercase letter (A-Z).
+* **Lowercase:** Must include at least one lowercase letter (a-z).
+* **Numerals:** Must include at least one numeric digit (0-9).
+* **Special Characters:** Must include at least one special character (!, @, #, $, %, ^, &, *, etc.).
+* **Dictionary Restrictions:** Cannot contain the company name, user's first name, or user's last name.
+* **History Restriction:** Cannot match any of the previous 12 passwords used.
+* **Expiration:** Passwords expire every 90 days. Users will receive automated email warnings at 14, 7, and 2 days prior to expiration.
+
+### 1.5 Account Lockout and Remediation
+To prevent brute-force attacks, the Active Directory enforces strict lockout policies.
+
+* **Trigger:** After 5 consecutive failed login attempts within a 15-minute window.
+* **Duration:** The account will be automatically locked for exactly 30 minutes.
+* **Self-Remediation:** Users must wait the full 30 minutes for the automatic unlock, or use the Self-Service Portal to force an unlock via MFA verification.
+
+### 1.6 Escalation Matrix: When to Contact IT
+Do not contact IT for password resets unless you encounter the following specific scenarios:
+
+* The SMS OTP is delayed by more than 15 minutes or not received after three attempts.
+* The account is marked as "Permanently Disabled" due to suspected anomalous activity.
+* Your registered MFA device (phone or physical token) is lost, stolen, or damaged.
+* The Self-Service Portal displays a "500 Internal Server Error" or "Database Unreachable" message.
+
+---
+
+## 2. VPN ACCESS POLICY
+
+### 2.1 Purpose
+The Virtual Private Network (VPN) creates an encrypted tunnel between remote endpoints and the corporate intranet, ensuring data confidentiality and integrity over public networks.
+
+### 2.2 Approved VPN Client
+The only authorized software for corporate network access is the **Cisco AnyConnect Secure Mobility Client**. Use of third-party VPNs, proxy servers, or unauthorized tunneling software is strictly prohibited.
+
+### 2.3 Installation and Configuration Steps
+Employees provisioned for remote work must follow these deployment instructions:
+
+* Log in to the Internal Software Center using SSO credentials.
+* Navigate to the "Network & Security" category.
+* Download the appropriate Cisco AnyConnect installer for your operating system (Windows 11 or macOS Sonoma).
+* Run the executable with local administrator privileges (prompted via CyberArk).
+* Reboot the workstation upon successful installation.
+* Launch the Cisco AnyConnect application from the Start Menu or Applications folder.
+* In the server address field, manually enter: `vpn.company.com`
+* Click "Connect" to initiate the handshake.
+* Enter your Active Directory username and password when prompted by the SSO gateway.
+* Approve the push notification sent to your corporate Duo Mobile authentication app.
+
+### 2.4 Common VPN Error Codes
+
+| Error Code | Description | User Action Required |
+| :--- | :--- | :--- |
+| Code 401 | Invalid Credentials | Verify AD password and ensure Caps Lock is off. |
+| Code 403 | Access Denied / Location Blocked | You are attempting to connect from a geoblocked country. Contact Security. |
+| Code 408 | MFA Timeout | The Duo push was not approved within 60 seconds. Retry connection. |
+| Code 502 | Gateway Unreachable | Check local internet connection. Restart ISP router. |
+| Code 812 | Certificate Revoked | Device certificate expired. Connect to Helpdesk for re-enrollment. |
+
+### 2.5 Troubleshooting Connectivity
+Before submitting a support ticket, users must perform the following Tier 1 diagnostics:
+
+* Verify local internet connectivity by navigating to a public website (e.g., google.com).
+* Restart your home wireless router or modem by unplugging it for 30 seconds.
+* Flush your DNS cache by opening Command Prompt and typing `ipconfig /flushdns`.
+* Disconnect and completely exit the Cisco AnyConnect application from the system tray.
+* Switch from a wireless connection to a hardwired Ethernet connection to rule out Wi-Fi interference.
+
+### 2.6 Service Level Escalation
+If the VPN remains inaccessible after completing all Tier 1 diagnostics, submit a high-priority ticket to the Network Operations Center (NOC) queue. Include your current IP address and the exact error code displayed.
+
+---
+
+## 3. SOFTWARE INSTALLATION POLICY
+
+### 3.1 Purpose
+To maintain endpoint security, prevent malware infections, and ensure software licensing compliance, the company strictly regulates what applications can be installed on corporate hardware.
+
+### 3.2 Pre-Approved Standard Software Catalog
+The following applications are whitelisted and can be installed without managerial or IT approval via the Company Software Center:
+
+* **Productivity:** Microsoft 365 Apps for Enterprise (Word, Excel, PowerPoint, OneNote)
+* **Communication:** Zoom Desktop Client, Slack Enterprise Grid, Microsoft Teams
+* **Development:** Python 3.12+, Visual Studio Code, Git for Windows, Docker Desktop
+* **Browsers:** Google Chrome Enterprise, Mozilla Firefox Extended Support Release (ESR)
+* **Utilities:** Adobe Acrobat Reader DC, 7-Zip, Notepad++, Snagit
+
+### 3.3 Restricted and Blacklisted Software
+Installation or attempted execution of the following software categories is a violation of the Acceptable Use Policy (AUP):
+
+* Peer-to-Peer (P2P) file-sharing tools and Torrent clients (e.g., BitTorrent, uTorrent).
+* Unauthorized remote administration tools (e.g., TeamViewer, AnyDesk, VNC).
+* PC gaming platforms and individual game executables (e.g., Steam, Epic Games Launcher).
+* Cryptocurrency mining scripts or wallet applications.
+* Unlicensed, cracked, or pirated media editing software.
+
+### 3.4 Installation Request Process
+If an employee requires software not listed in the Standard Catalog, they must follow the procurement workflow:
+
+* Log in to the IT Service Management (ITSM) portal.
+* Select "Request New Software".
+* Provide the software name, vendor, version number, and a direct link to the vendor's website.
+* Write a detailed business justification explaining why standard tools are insufficient.
+* Submit the request for Managerial Approval.
+* Upon manager approval, the request routes to the IT Security team for an architecture and vulnerability review.
+* If approved by Security, IT Asset Management will procure the license and push the software via Microsoft Endpoint Configuration Manager (MECM).
+
+### 3.5 Administrative Privileges
+Standard users do not possess Local Administrator rights. Software requiring elevated permissions (such as local database engines, customized development servers, or network packet analyzers) requires a secondary "Privileged Access Management" (PAM) request, which mandates annual recertification.
+
+---
+
+## 4. LAPTOP TROUBLESHOOTING POLICY
+
+### 4.1 Purpose
+To provide employees with the necessary resources to diagnose and resolve minor hardware and operating system anomalies, minimizing downtime and reducing IT Helpdesk ticket volume.
+
+### 4.2 Known Hardware Symptoms and Causes
+
+| Symptom | Potential Cause | Immediate Action |
+| :--- | :--- | :--- |
+| Overheating / Loud Fan Noise | Blocked air vents, heavy CPU load | Place on hard surface, close unnecessary browser tabs. |
+| Slow System Performance | Insufficient RAM, full hard drive | Restart PC, empty Recycle Bin, close background apps. |
+| Blue Screen of Death (BSOD) | Driver conflict, failing memory | Document the specific Stop Code (e.g., IRQL_NOT_LESS_OR_EQUAL). |
+| Rapid Battery Drain | Degrading battery health, high screen brightness | Lower brightness, enable Battery Saver mode in Windows settings. |
+| Keyboard / Trackpad Unresponsive | Dust accumulation, driver crash | Clean with compressed air, attempt external USB mouse/keyboard. |
+
+### 4.3 Mandatory Tier 1 Troubleshooting Protocol
+Employees must execute these five steps prior to contacting IT for laptop performance issues:
+
+* **System Reboot:** Perform a full restart (Start > Power > Restart), not just closing the lid to sleep.
+* **Resource Audit:** Open Task Manager (Ctrl+Shift+Esc) to identify and close applications consuming more than 40% CPU or Memory.
+* **Storage Audit:** Navigate to "This PC" and ensure the C: Drive has a minimum of 20GB of free space. Delete temporary files if necessary.
+* **Security Scan:** Open Windows Security and run a "Quick Scan" to rule out malicious background processes.
+* **System Updates:** Navigate to Settings > Windows Update and apply any pending critical security patches, then restart.
+
+### 4.4 Thermal Management Guidelines
+Prolonged overheating degrades internal components. Employees are responsible for physical device care.
+
+* Never operate the laptop on a bed, couch, or blanket, which blocks bottom and side ventilation grills.
+* Ensure a minimum of 2 inches of clearance around the exhaust vents.
+* Use compressed air (held upright) to blow dust out of the vents once a quarter.
+* If the laptop chassis becomes too hot to comfortably touch, power it down immediately and notify IT.
+
+### 4.5 Hardware Failure Escalation
+Immediate hardware replacement workflows are triggered only under the following conditions:
+
+* Visible physical damage (cracked LCD screen, shattered casing, liquid spills).
+* Three or more documented Blue Screen errors within a 5-day period.
+* Visible battery swelling (chassis bulging, trackpad popping out). **Warning:** A swollen battery is a severe fire hazard. Power off immediately, unplug from the wall, and isolate the device.
+
+---
+
+## 5. EMAIL ACCESS POLICY
+
+### 5.1 Purpose
+To establish standards for the use, management, and troubleshooting of corporate electronic mail, ensuring reliable internal and external communication.
+
+### 5.2 Approved Email Clients
+Corporate email is exclusively hosted on Microsoft Exchange Online. Access is permitted only via:
+
+* Microsoft Outlook for Windows or macOS (Desktop Client).
+* Outlook on the Web (OWA) via approved web browsers.
+* Microsoft Outlook Mobile App for iOS and Android (requires Intune MDM profile).
+
+### 5.3 Storage and Attachment Limitations
+To maintain server performance and enforce data retention policies, the following limits are strictly enforced:
+
+* **Primary Mailbox Quota:** 50 Gigabytes (GB) maximum.
+* **In-Place Archive Quota:** 100 Gigabytes (GB) auto-expanding.
+* **Warning Threshold:** Users receive automated warnings when mailbox reaches 48GB.
+* **Send/Receive Suspension:** At 50GB, the ability to send or receive new emails is hard-stopped.
+* **Maximum Attachment Size:** 25 Megabytes (MB) per email (includes text and encoded attachments).
+* **Large File Transfer:** Files exceeding 25MB must be shared securely via corporate OneDrive links, not attached directly.
+
+### 5.4 Common Outlook Errors and Diagnostics
+
+| Issue | Diagnostic Step | Resolution |
+| :--- | :--- | :--- |
+| "Disconnected" Status | Check bottom right corner of Outlook window. | Ensure VPN is connected or internet is active. Click "Send/Receive". |
+| Outlook Crashing on Startup | Corrupted add-in or profile. | Open Run dialog (Win+R), type `outlook.exe /safe`. Disable recent add-ins. |
+| Missing Recent Emails | Sync issue between cache and server. | Check Outlook on the Web. If emails are there, rebuild local OST file. |
+| Emails Stuck in Outbox | Attachment too large or server timeout. | Drag email to Drafts, remove large attachment, and attempt to resend. |
+
+### 5.5 Mailbox Archiving and Cleanup
+Employees are responsible for managing their digital workspace.
+
+* Empty the "Deleted Items" and "Junk Email" folders weekly.
+* Utilize the "Clean Up Folder" tool to remove redundant messages in long email threads.
+* Move emails older than 12 months to the Online Archive to free up primary mailbox storage.
+
+---
+
+## 6. REMOTE WORK IT POLICY
+
+### 6.1 Purpose
+To ensure that employees working from home, co-working spaces, or during travel maintain the same standard of cybersecurity and data protection as they would within the corporate office network.
+
+### 6.2 Network Security Requirements
+Remote workspaces must adhere to strict connectivity guidelines to prevent unauthorized data interception.
+
+* **Home Router Security:** Employees must change default ISP router passwords to complex passwords.
+* **Wi-Fi Encryption:** Home networks must utilize WPA2-AES or WPA3 encryption protocols. Open or WEP networks are prohibited.
+* **Firmware:** Employees are strongly advised to keep their home router firmware updated.
+* **Bandwidth:** A minimum stable connection of 25 Mbps download and 10 Mbps upload is required for optimal video conferencing and VPN performance.
+
+### 6.3 Public Wi-Fi Restrictions
+Working from coffee shops, airports, or hotels introduces significant man-in-the-middle (MitM) risks.
+
+* Connecting to public, unencrypted Wi-Fi networks is strictly prohibited unless the corporate VPN is initiated immediately upon connection.
+* The "Always-On" VPN feature must not be bypassed.
+* Employees are encouraged to use corporate-issued cellular hotspots or smartphone tethering in lieu of public Wi-Fi whenever possible.
+
+### 6.4 Device Security and Physical Access
+The corporate endpoint is an extension of the company network.
+
+* **No Shared Access:** Family members, friends, or roommates are strictly forbidden from using company-issued laptops or mobile devices for any reason.
+* **Screen Lock:** Systems are configured via Group Policy to automatically lock the screen after 5 minutes of inactivity. Attempting to bypass this using "mouse jigglers" or software utilities is a terminable offense.
+* **Physical Security:** When working in public view or co-working spaces, employees must use privacy screen filters and ensure their laptop is physically secured or kept in their immediate possession at all times.
+
+---
+
+## 7. HARDWARE REPLACEMENT POLICY
+
+### 7.1 Purpose
+To establish a predictable, fair, and fiscally responsible lifecycle management process for all corporate computing hardware and peripherals.
+
+### 7.2 Standard Asset Lifecycle
+All IT assets are assigned a predetermined depreciation lifecycle.
+
+* **Laptops (Standard & Developer):** 48 months (4 years)
+* **Desktop Workstations:** 60 months (5 years)
+* **Monitors (Standard 24" & 27"):** 72 months (6 years)
+* **Mobile Phones (Corporate Owned):** 24 months (2 years)
+* **Peripherals (Keyboards, Mice, Headsets):** Replaced strictly on a break-fix basis.
+
+### 7.3 Criteria for Out-of-Cycle Replacement
+Hardware may be replaced before the end of its standard lifecycle under specific, documented conditions:
+
+* Catastrophic hardware failure that is not covered by warranty and where repair costs exceed 50% of the residual value of the device.
+* Accidental physical damage (e.g., dropped in transit). Repeated instances of physical damage may result in disciplinary action.
+* A documented change in job role requiring significantly higher computing power (e.g., transferring from Sales to Video Production).
+
+### 7.4 Request and Approval Workflow
+Employees cannot independently request a new laptop simply because a newer model has been released.
+
+* The IT Asset Management (ITAM) system automatically flags devices approaching the 48-month mark.
+* ITAM generates an automated email to the employee and their direct manager 30 days prior to eligibility.
+* The direct manager must approve the capital expenditure against their departmental budget.
+* Once approved, IT Asset Management provisions the new device.
+* Standard turnaround time for provisioning and shipping is 3 to 5 business days.
+
+### 7.5 Old Hardware Return Protocol
+Upon receiving a replacement device, the employee must return the old asset.
+
+* The employee has exactly 14 calendar days to migrate local data (using OneDrive) and return the old device.
+* IT will provide a pre-paid shipping box with tracking.
+* Failure to return the old device within 14 days will result in the immediate suspension of network access on the new device, and the unreturned asset cost will be reported to HR and Finance.
+
+---
+
+## 8. SECURITY POLICY
+
+### 8.1 Purpose
+To safeguard company data, proprietary algorithms, customer information, and financial records from internal and external threats, adhering to ISO 27001 and SOC 2 compliance standards.
+
+### 8.2 Mandatory Incident Reporting
+Time is the most critical factor in mitigating a cyberattack. Employees are required to report the following incidents to the Security Operations Center (SOC) immediately:
+
+* Receipt of suspected phishing, spear-phishing, or whaling emails.
+* Accidental clicking of a suspicious link or downloading of an unverified attachment.
+* Unauthorized, unexpected Duo MFA push notifications appearing on your mobile device.
+* Discovery of sensitive company data exposed on public websites or unauthorized cloud storage.
+* Suspicion of a malware or ransomware infection (e.g., files suddenly becoming encrypted, unexpected pop-ups).
+
+### 8.3 Prohibited Security Practices
+Employees must adhere to strict zero-trust behaviors. The following actions are strictly forbidden:
+
+* Sharing passwords, PINs, or MFA tokens with colleagues, managers, or IT staff. (IT will never ask for your password).
+* Writing passwords on sticky notes attached to monitors or stored in unencrypted digital text files.
+* Connecting personal, unverified external storage devices (USB thumb drives, external hard drives) to corporate laptops. USB mass storage access is blocked by Endpoint Detection and Response (EDR) software.
+* Attempting to disable, bypass, or uninstall corporate antivirus, EDR (e.g., CrowdStrike), firewall, or VPN software.
+* Forwarding corporate emails containing internal data to personal email addresses (e.g., Gmail, Yahoo).
+
+### 8.4 Lost or Stolen Device Procedure
+The loss of a corporate device is a critical security incident.
+
+* If a laptop, mobile phone, or hardware MFA token is lost or stolen, it must be reported to the IT Helpdesk and the Security team within **1 hour** of discovering the loss.
+* Provide the exact time, location, and circumstances of the loss.
+* IT will immediately issue a remote "Wipe and Lock" command to destroy all data on the device.
+* A formal police report may be required for stolen items to process insurance claims.
+
+---
+
+## 9. PRINTER SUPPORT POLICY
+
+### 9.1 Purpose
+To maintain the fleet of corporate Multi-Function Devices (MFDs) and ensure employees have secure, reliable physical document processing capabilities when working in corporate offices.
+
+### 9.2 "Follow-Me" Secure Printing
+All corporate offices utilize a secure print-release system to prevent confidential documents from sitting unattended on printer trays.
+
+* Employees print to a universal virtual print queue (e.g., "Corporate_Secure_Print").
+* The job is held on the server for 24 hours.
+* The employee walks up to any available MFD in any corporate office.
+* The employee scans their RFID security badge or enters their PIN on the printer interface.
+* The user selects the queued document and presses "Print" to release the job locally.
+
+### 9.3 Basic Printer Diagnostics
+
+| Symptom | Employee Action | When to Escalate |
+| :--- | :--- | :--- |
+| Paper Jam Error | Follow on-screen animations. Open indicated trays and gently remove paper. Do not tear paper. | If paper is deeply lodged or error persists after clearing. |
+| "Low Toner" Warning | Ignore warning if print quality is fine. MFDs auto-order toner. | If printouts are faded, streaky, or completely blank. |
+| Badge Scan Failure | Ensure badge is not shielded by other cards in wallet. Try manually entering PIN. | If badge fails on multiple devices or building access also fails. |
+| Offline Status | Verify network cable is plugged into the wall and printer. Restart MFD power button. | If printer remains offline for more than 15 minutes after restart. |
+
+### 9.4 Environmental Initiatives
+To support corporate sustainability goals, employees are urged to adopt the following practices:
+
+* Print double-sided (duplex) by default.
+* Print exclusively in Black and White unless color is strictly required for external client presentations.
+* Avoid printing emails or draft documents. Utilize digital reviewing tools in Office 365.
+
+---
+
+## 10. IT SUPPORT CONTACT GUIDELINES
+
+### 10.1 Purpose
+To structure the intake of IT support requests, ensuring that critical business outages receive immediate attention while standard requests are handled within defined Service Level Agreements (SLAs).
+
+### 10.2 Service Level and Priority Matrix
+When submitting a ticket via the ITSM portal, users must accurately select the business impact. Misclassification of ticket priority to bypass queues is a violation of IT policy.
+
+| Priority Level | Definition | Target Response Time | Target Resolution Time | Example Scenario |
+| :--- | :--- | :--- | :--- | :--- |
+| **P1 - Critical** | Company-wide outage or severe security breach. | 15 Minutes | 4 Hours | Entire site offline, active ransomware attack, SSO system down. |
+| **P2 - High** | Complete work stoppage for an individual or small team. | 1 Hour | 8 Hours | Laptop will not boot, VIP user locked out, department shared drive inaccessible. |
+| **P3 - Medium** | Issue impacting productivity, but a workaround exists. | 4 Hours | 3 Business Days | Printer jammed, software installation request, non-critical application bug. |
+| **P4 - Low** | General inquiries, training requests, or minor cosmetic issues. | 24 Hours | 5 Business Days | Asking how to use a feature in Excel, requesting an extra charging cable. |
+
+### 10.3 Ticketing Channels
+To ensure proper routing, employees must use the appropriate channels based on priority:
+
+* **Self-Service Portal (Preferred):** For all P3 and P4 requests. Allows for detailed documentation and screenshot uploads.
+* **Live Chat (Teams/Slack):** For quick P3 questions, password unlock assistance, and minor troubleshooting.
+* **Phone Hotline:** Reserved exclusively for P1 and P2 emergencies where the user is completely unable to work or cannot access the self-service portal.
+
+### 10.4 Support Operating Hours
+* **Standard Helpdesk:** Monday through Friday, 9:00 AM to 6:00 PM (Local Office Time).
+* **After-Hours On-Call:** Available 24/7/365, but strictly reserved for P1 Critical Production Outages or P1 Security Incidents. Standard requests submitted after hours will be queued for the next business day.
+
+---
